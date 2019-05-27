@@ -38,6 +38,8 @@ export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000
 export SAVEHIST=$HISTSIZE
 
+[ -d "$HOME/.gem/ruby/2.6.0/bin" ] && export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
+
 #export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 
 # color formatting for man pages
@@ -281,6 +283,8 @@ zshaddhistory() { whence ${${(z)1}[1]} >| /dev/null || return 1 }
 # =============================================================================
 
 # Common CTRL bindings.
+bindkey '^[[A' up-line-or-search                                                
+bindkey '^[[B' down-line-or-search
 bindkey "^a" beginning-of-line
 bindkey "^e" end-of-line
 bindkey "^f" forward-word
