@@ -3,8 +3,21 @@ if [[ $(ps --no-header -p $PPID -o comm) =~ '^yakuake|konsole|alacritty|tmux' ]]
             xprop -f _KDE_NET_WM_BLUR_BEHIND_REGION 32c -set _KDE_NET_WM_BLUR_BEHIND_REGION 0 -id $wid; done
 fi
 
-. /usr/share/powerline/bindings/zsh/powerline.zsh
+[ -f /usr/share/powerline/bindings/zsh/powerline.zsh ] . /usr/share/powerline/bindings/zsh/powerline.zsh
+[ -f /usr/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh ] . /usr/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh
 
+if [[ $DISPLAY ]]; then
+    # If not running interactively, do not do anything
+    [[ $- != *i* ]] && return
+    if [[ -z "$TMUX" ]] ;then
+        ID="$( tmux ls | grep -vm1 attached | cut -d: -f1 )" # get the id of a deattached session
+        if [[ -z "$ID" ]] ;then # if not available create a new one
+            tmux new-session
+        else
+            tmux attach-session -t "$ID" # if available attach to it
+        fi
+    fi
+fi
 
 # =============================================================================
 #                                   Functions
@@ -38,7 +51,9 @@ export HISTFILE="$HOME/.zsh_history"
 export HISTSIZE=10000
 export SAVEHIST=$HISTSIZE
 
+[ -d "$HOME/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 [ -d "$HOME/.gem/ruby/2.6.0/bin" ] && export PATH="$HOME/.gem/ruby/2.6.0/bin:$PATH"
+[ -d "$HOME/go/bin" ] && export PATH="$HOME/go/bin:$PATH"
 
 #export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=36;01:cd=33;01:su=31;40;07:sg=36;40;07:tw=32;40;07:ow=33;40;07:'
 
@@ -98,10 +113,10 @@ source ~/.zplug/init.zsh
 
 # zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
-zplug 'themes/sorin', from:oh-my-zsh, as:theme
+#zplug 'themes/sorin', from:oh-my-zsh, as:theme
 
 # oh-my-zsh
-#zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
+zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh"
 
 # Load theme
 zplug "mafredri/zsh-async", from:github, use:async.zsh
@@ -112,7 +127,7 @@ zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme, from:github, at:next,
 
 #zplug "themes/spaceship", from:oh-my-zsh, as:theme
 #zplug "dracula/zsh", from:github, as:theme
-zplug "geometry-zsh/geometry", from:github, as:theme
+#zplug "geometry-zsh/geometry", from:github, as:theme
 #zplug "mafredri/zsh-async", from:github, use:async.zsh
 #zplug "sindresorhus/pure", use:pure.zsh, from:github, as:theme
 #zplug "eendroroy/alien", from:github, as:theme
@@ -162,6 +177,7 @@ zplug "plugins/urltools",          from:oh-my-zsh
 zplug "plugins/web-search",        from:oh-my-zsh
 zplug "plugins/z",                 from:oh-my-zsh
 zplug "plugins/fancy-ctrl-z",      from:oh-my-zsh
+zplug "plugins/aws",               from:oh-my-zsh
 
 # Supports oh-my-zsh plugins and the like
 if [[ $OSTYPE = (linux)* ]]; then
@@ -734,4 +750,3 @@ zstyle ':completion:*:default' list-colors "${(s.:.)LS_COLORS}"
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
 # vim: ft=zsh sw=4 sts=4 et
-
