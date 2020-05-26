@@ -3,8 +3,8 @@ if [[ $(ps --no-header -p $PPID -o comm) =~ '^yakuake|konsole|alacritty|tmux' ]]
             xprop -f _KDE_NET_WM_BLUR_BEHIND_REGION 32c -set _KDE_NET_WM_BLUR_BEHIND_REGION 0 -id $wid; done
 fi
 
-[ -f /usr/share/powerline/bindings/zsh/powerline.zsh ] . /usr/share/powerline/bindings/zsh/powerline.zsh
-[ -f /usr/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh ] . /usr/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh
+[ -f /usr/share/powerline/bindings/zsh/powerline.zsh ] && source /usr/share/powerline/bindings/zsh/powerline.zsh
+[ -f /usr/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh ] && source /usr/lib/python3.8/site-packages/powerline/bindings/zsh/powerline.zsh
 
 if [[ $DISPLAY ]]; then
     # If not running interactively, do not do anything
