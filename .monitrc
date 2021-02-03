@@ -1,0 +1,11 @@
+# Start monit as a daemon, detach from console. check every 300 seconds.
+set daemon 300
+check process "panel" matching "libwindowck.so"
+    restart program = "/usr/bin/pkill --signal SIGTERM -f -- 'wrapper-1\.0.+libwindowck.so .+windowck-plugin'  "
+    if total memory > 300.0 MB for 1 cycle then restart
+
+# I cant use the same name "panel" again as a service name,
+# so i used "wrapper-1.0" which works also
+check process "wrapper-1.0" matching "libwckbuttons.so"
+    restart program = "/usr/bin/pkill --signal SIGTERM -f -- 'wrapper-1\.0.+libwckbuttons.so .+wckbuttons'  "
+    if total memory > 300.0 MB for 1 cycle then restart
