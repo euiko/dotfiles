@@ -9,7 +9,8 @@ fi
 if [[ $DISPLAY ]]; then
     # If not running interactively, do not do anything
     [[ $- != *i* ]] && return
-    if [[ -z "$TMUX" ]] ;then
+    TMUX_CHECK=`which tmux`
+    if [[ -z "$TMUX" && $? -eq 0 ]] ;then
         ID="$( tmux ls | grep -vm1 attached | cut -d: -f1 )" # get the id of a deattached session
         if [[ -z "$ID" ]] ;then # if not available create a new one
             tmux new-session
